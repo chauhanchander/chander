@@ -1,0 +1,9 @@
+---
+# tasks file for iam
+- name: reflect team name for billing purposes
+  iam: 
+    aws_account_alias: "{{aws_account_alias}}"
+    aws_account_state: "{{aws_account_state}}" 
+    aws_access_key: "{{aws_access_key|lookup('env','AWS_ACCESS_KEY_ID'}}"
+    aws_secret_key: "{{aws_secret_key|lookup('env','AWS_SECRET_ACCESS_KEY'}}"
+  register: aws_alias_status
