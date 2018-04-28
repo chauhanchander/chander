@@ -1,0 +1,43 @@
+#!/Users/pg942665/miniconda2/envs/snakes/bin/python
+
+from ansible.module_utils.basic import *
+import boto3
+import os
+
+iam = boto3.resource('iam')
+
+def main():
+
+
+	module = AnsibleModule(
+        argument_spec=dict(
+        	aws_account_alias=dict(),
+		aws_account_state=dict(),
+		aws_access_key=dict(),
+		aws_secret_key=dict()
+            ),
+        )
+	print (argument_spec)
+	aws_access_key=module['aws_access_key']
+	aws_account_state=module['aws_account_state']
+	aws_access_key=['aws_access_key']
+	aws_secret_key=['aws_secret_key']
+	changed = False
+	if(aws_account_state == 'absent'):
+		# if state is abset and account does not exists, we do not do anything
+		changed = False
+		# if state is absent and account exists, we delete it and modify state to changed.
+		changed = True
+	else:
+		aws_account_state = 'present'
+		# if state is undefined or present and account exists with same name (alias)  we do not do anything
+		changed = False
+		# check what is the name of alias
+		# if alias does not matches with what is given by user, we proceed to change it.
+		changed = True
+
+	response = {"aws_account_id": "" , "aws_account_alias" : ""}
+	module.exit_json(changed=changed, meta=response)
+
+if __name__ == '__main__':
+    main()
