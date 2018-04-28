@@ -1,5 +1,15 @@
 ---
 - hosts: aws
-  become: true
   roles:
-    - iam
+    - role: iam 
+      aws_account_alias: "" 
+      aws_account_state : "{{ | default('present')}}" 
+      aws_access_key : "{{ | lookup('env','AWS_ACCESS_KEY_ID') }}"  
+      aws_secret_key : "{{ | lookup('env','AWS_SECRET_ACCESS_KEY') }}"
+    - fail: msg: 'variable {{item}} not defined'
+      when: item not defined
+        - aws_access_key
+        - aws_secret_key
+        - aws_account_alias
+        - aws_account_state
+      
